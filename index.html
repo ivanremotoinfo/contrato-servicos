@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contrato de Prestação de Serviços | SuporteADV</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #0d0d0d; color: #e0e0e0; padding: 24px 16px; }
+  .container { max-width: 760px; margin: 0 auto; }
+
+  .header { text-align: center; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid #222; }
+  h1 { font-size: 1.5rem; color: #008080; margin-bottom: 6px; }
+  .subtitle { font-size: 0.88rem; color: #888; line-height: 1.5; }
+  .brand { font-size: 0.78rem; margin-top: 8px; color: #555; }
+  .brand span.s { color: #8B00FF; font-weight: 700; }
+  .brand span.a { color: #008080; font-weight: 700; }
+
+  .card { background: #111; border-radius: 10px; border: 1px solid #222; border-left: 3px solid #8B00FF; padding: 20px 22px; margin-bottom: 14px; }
+  .card-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #008080; font-weight: 700; margin-bottom: 16px; }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  @media (max-width: 520px) { .form-grid { grid-template-columns: 1fr; } }
+  .field.full { grid-column: 1 / -1; }
+  .field label { display: block; font-size: 0.78rem; color: #888; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 9px 11px; border: 1.5px solid #333; border-radius: 6px;
+    font-size: 0.92rem; color: #fff; background: #1a1a1a; transition: border-color 0.2s; resize: vertical;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #008080; box-shadow: 0 0 0 2px rgba(0,128,128,0.2); }
+  .field select option { background: #1a1a1a; }
+
+  button.gerar { background: #008080; color: #fff; border: none; padding: 10px 26px; border-radius: 6px; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.07em; cursor: pointer; transition: background 0.18s; text-transform: uppercase; margin-right: 10px; }
+  button.gerar:hover { background: #006666; box-shadow: 0 0 10px rgba(0,128,128,0.4); }
+  button.copiar { background: #1a1a1a; border: 1.5px solid #333; color: #888; padding: 10px 18px; border-radius: 6px; font-size: 0.82rem; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+  button.copiar:hover { border-color: #008080; color: #008080; }
+  button.imprimir { background: #8B00FF; color: #fff; border: none; padding: 10px 18px; border-radius: 6px; font-size: 0.82rem; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+
+  .doc-wrap { margin-top: 14px; display: none; }
+  .doc-wrap.visible { display: block; }
+  .doc-titulo { font-size: 0.75rem; text-transform: uppercase; color: #008080; font-weight: 700; margin-bottom: 12px; }
+  .doc-box {
+    background: #fff; color: #1a1a1a; border-radius: 8px; padding: 44px 50px;
+    font-family: 'Times New Roman', serif; font-size: 0.95rem; line-height: 1.9;
+    white-space: pre-wrap; word-wrap: break-word;
+  }
+  @media (max-width: 520px) { .doc-box { padding: 20px 16px; font-size: 0.85rem; } }
+  .acoes { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+  .erro { background: #1a0a0a; border: 1px solid #4a1a1a; border-radius: 8px; padding: 14px 16px; color: #ff6666; font-size: 0.88rem; margin-top: 14px; display: none; }
+  .erro.visible { display: block; }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .card, .header, .acoes, .doc-titulo, .erro { display: none !important; }
+    .doc-wrap { display: block !important; }
+    .doc-box { box-shadow: none; padding: 20mm; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>Contrato de Prestação de Serviços</h1>
+    <p class="subtitle">Gere contratos de prestação de serviços gerais (não advocatícios) completos e personalizados.</p>
+    <p class="brand"><span class="s">suporte</span><span class="a">ADV</span>.br — Ferramentas para Advogados</p>
+  </div>
+
+  <!-- Tipo de serviço -->
+  <div class="card">
+    <div class="card-label">Tipo de Serviço</div>
+    <div class="form-grid">
+      <div class="field full">
+        <label>Área do serviço</label>
+        <select id="tipoServico">
+          <option value="ti">Tecnologia da Informação / Suporte técnico</option>
+          <option value="consultoria">Consultoria / Assessoria</option>
+          <option value="marketing">Marketing / Publicidade</option>
+          <option value="contabil">Contabilidade / Assessoria fiscal</option>
+          <option value="manutencao">Manutenção / Reforma</option>
+          <option value="design">Design / Criação</option>
+          <option value="outro">Outro serviço</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contratado -->
+  <div class="card">
+    <div class="card-label">Contratado (prestador do serviço)</div>
+    <div class="form-grid">
+      <div class="field full"><label>Nome / Razão social</label>
+        <input type="text" id="contNome" placeholder="Ex: João Silva — Suporte em TI">
+      </div>
+      <div class="field"><label>CPF / CNPJ</label>
+        <input type="text" id="contCPF" placeholder="000.000.000-00">
+      </div>
+      <div class="field"><label>RG (se PF)</label>
+        <input type="text" id="contRG" placeholder="Ex: 1234567 SSP/BA">
+      </div>
+      <div class="field"><label>Nacionalidade</label>
+        <input type="text" id="contNac" value="brasileiro(a)">
+      </div>
+      <div class="field"><label>Estado civil</label>
+        <select id="contEstCivil">
+          <option>solteiro(a)</option><option>casado(a)</option><option>divorciado(a)</option><option>viúvo(a)</option>
+        </select>
+      </div>
+      <div class="field"><label>Profissão / Especialidade</label>
+        <input type="text" id="contProf" placeholder="Ex: técnico em TI, contador...">
+      </div>
+      <div class="field full"><label>Endereço completo</label>
+        <input type="text" id="contEnd" placeholder="Rua, número, bairro, cidade/UF">
+      </div>
+    </div>
+  </div>
+
+  <!-- Contratante -->
+  <div class="card">
+    <div class="card-label">Contratante (quem contrata o serviço)</div>
+    <div class="form-grid">
+      <div class="field full"><label>Nome / Razão social</label>
+        <input type="text" id="cliNome" placeholder="Ex: Escritório de Advocacia Silva">
+      </div>
+      <div class="field"><label>CPF / CNPJ</label>
+        <input type="text" id="cliCPF" placeholder="000.000.000-00">
+      </div>
+      <div class="field"><label>Representante legal (PJ)</label>
+        <input type="text" id="cliRep" placeholder="Nome do responsável (se empresa)">
+      </div>
+      <div class="field full"><label>Endereço completo</label>
+        <input type="text" id="cliEnd" placeholder="Rua, número, bairro, cidade/UF">
+      </div>
+    </div>
+  </div>
+
+  <!-- Objeto e valores -->
+  <div class="card">
+    <div class="card-label">Objeto, Prazo e Pagamento</div>
+    <div class="form-grid">
+      <div class="field full"><label>Descrição detalhada do serviço</label>
+        <textarea id="objeto" rows="3" placeholder="Descreva o serviço contratado. Ex: Prestação de serviços de suporte técnico remoto para computadores, configuração de sistemas, instalação de softwares e manutenção preventiva dos equipamentos..."></textarea>
+      </div>
+      <div class="field"><label>Duração do contrato</label>
+        <select id="duracao">
+          <option value="indeterminado">Prazo indeterminado</option>
+          <option value="3meses">3 meses</option>
+          <option value="6meses">6 meses</option>
+          <option value="12meses">12 meses</option>
+          <option value="24meses">24 meses</option>
+          <option value="obra">Até conclusão da obra/projeto</option>
+          <option value="custom">Prazo específico</option>
+        </select>
+      </div>
+      <div class="field" id="wrap-dur-custom" style="display:none">
+        <label>Prazo específico</label>
+        <input type="text" id="duracaoCustom" placeholder="Ex: 90 dias corridos">
+      </div>
+      <div class="field"><label>Valor total / mensal (R$)</label>
+        <input type="number" id="valor" placeholder="Ex: 1500" step="0.01" min="0">
+      </div>
+      <div class="field"><label>Forma de pagamento</label>
+        <select id="formaPag">
+          <option value="mensal_dia10">Mensal — até o dia 10</option>
+          <option value="mensal_dia5">Mensal — até o dia 5</option>
+          <option value="quinzenal">Quinzenal</option>
+          <option value="semanal">Semanal</option>
+          <option value="unico">Pagamento único (à vista)</option>
+          <option value="conclusao">Na conclusão do serviço</option>
+          <option value="parcelado">Parcelado (conforme acordo)</option>
+        </select>
+      </div>
+      <div class="field"><label>Reajuste anual</label>
+        <select id="reajuste">
+          <option value="INPC">INPC</option>
+          <option value="IPCA">IPCA</option>
+          <option value="IGP-M">IGP-M</option>
+          <option value="nenhum">Sem reajuste previsto</option>
+        </select>
+      </div>
+      <div class="field"><label>Rescisão antecipada — aviso</label>
+        <select id="avisoRescisao">
+          <option value="30dias">30 dias de antecedência</option>
+          <option value="15dias">15 dias de antecedência</option>
+          <option value="60dias">60 dias de antecedência</option>
+          <option value="nenhum">Sem aviso prévio</option>
+        </select>
+      </div>
+      <div class="field"><label>Multa rescisória (%)</label>
+        <input type="number" id="multaRescisao" value="10" step="1" min="0" max="100">
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="field"><label>Foro de eleição</label>
+        <input type="text" id="foro" placeholder="Ex: Comarca de Salvador/BA">
+      </div>
+      <div class="field"><label>Data do contrato</label>
+        <input type="date" id="dataContrato">
+      </div>
+      <div class="field"><label>Local de assinatura</label>
+        <input type="text" id="local" placeholder="Ex: Salvador, Bahia">
+      </div>
+      <div class="field"><label>Testemunhas</label>
+        <select id="numTest">
+          <option value="0">Sem testemunhas</option>
+          <option value="2" selected>2 testemunhas</option>
+        </select>
+      </div>
+      <div class="field full"><label>Cláusulas especiais (opcional)</label>
+        <textarea id="clausulasEsp" rows="2" placeholder="Ex: O contratado se compromete a responder em até 2 horas nos dias úteis..."></textarea>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="gerar" onclick="gerar()">GERAR CONTRATO</button>
+    </div>
+  </div>
+
+  <div class="erro" id="erro"></div>
+
+  <div class="doc-wrap" id="doc-wrap">
+    <div class="doc-titulo">📄 Contrato gerado — pronto para imprimir</div>
+    <div class="doc-box" id="doc-box"></div>
+    <div class="acoes">
+      <button class="copiar" onclick="copiar()">📋 Copiar texto</button>
+      <button class="imprimir" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.getElementById('duracao').addEventListener('change', function() {
+  document.getElementById('wrap-dur-custom').style.display = this.value === 'custom' ? '' : 'none';
+});
+
+function fmtMoeda(v) {
+  if (!v || isNaN(v)) return 'R$ 0,00';
+  return 'R$ ' + parseFloat(v).toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 });
+}
+function fmtData(d) {
+  if (!d) return new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
+  return new Date(d+'T12:00:00').toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
+}
+function v(id) { return (document.getElementById(id)?.value || '').trim(); }
+
+function showErro(msg) {
+  document.getElementById('erro').textContent = msg;
+  document.getElementById('erro').classList.add('visible');
+}
+function hideErro() { document.getElementById('erro').classList.remove('visible'); }
+
+function gerar() {
+  hideErro();
+  const contNome = v('contNome'); const cliNome = v('cliNome');
+  if (!contNome) return showErro('Informe o nome do contratado.');
+  if (!cliNome) return showErro('Informe o nome do contratante.');
+  if (!v('objeto')) return showErro('Descreva o objeto do contrato.');
+
+  const tipoServico = document.getElementById('tipoServico').value;
+  const contCPF = v('contCPF'); const contRG = v('contRG');
+  const contNac = v('contNac'); const contEstCivil = v('contEstCivil');
+  const contProf = v('contProf') || 'prestador de serviços';
+  const contEnd = v('contEnd');
+  const cliCPF = v('cliCPF'); const cliRep = v('cliRep'); const cliEnd = v('cliEnd');
+  const objeto = v('objeto');
+  const duracaoSel = document.getElementById('duracao').value;
+  const duracaoTxt = {
+    indeterminado: 'prazo indeterminado, podendo ser rescindido a qualquer tempo',
+    '3meses': '3 (três) meses', '6meses': '6 (seis) meses',
+    '12meses': '12 (doze) meses', '24meses': '24 (vinte e quatro) meses',
+    obra: 'até a conclusão do projeto/obra contratado(a)',
+    custom: v('duracaoCustom') || 'prazo a ser definido',
+  }[duracaoSel];
+  const valor = v('valor');
+  const formaPagSel = document.getElementById('formaPag').value;
+  const formaPagTxt = {
+    mensal_dia10: 'mensalmente, até o dia 10 de cada mês',
+    mensal_dia5: 'mensalmente, até o dia 5 de cada mês',
+    quinzenal: 'quinzenalmente', semanal: 'semanalmente',
+    unico: 'em parcela única, no ato da assinatura deste contrato',
+    conclusao: 'na conclusão e entrega do serviço',
+    parcelado: 'de forma parcelada, conforme acordado entre as partes',
+  }[formaPagSel];
+  const reajuste = document.getElementById('reajuste').value;
+  const avisoRescisao = { '30dias':'30 (trinta) dias', '15dias':'15 (quinze) dias', '60dias':'60 (sessenta) dias', nenhum:'sem necessidade de aviso prévio' }[document.getElementById('avisoRescisao').value];
+  const multaRescisao = v('multaRescisao') || '10';
+  const foro = v('foro') || 'Comarca do domicílio do Contratante';
+  const dataContrato = v('dataContrato');
+  const local = v('local') || '_______________';
+  const numTest = parseInt(v('numTest'));
+  const clausulasEsp = v('clausulasEsp');
+
+  const nomesServicos = { ti:'Suporte em TI', consultoria:'Consultoria', marketing:'Marketing', contabil:'Contabilidade', manutencao:'Manutenção', design:'Design', outro:'Serviços' };
+  const reajusteTxt = reajuste === 'nenhum' ? '' : `\n\nO valor dos serviços será reajustado anualmente pelo índice ${reajuste}, acumulado no período de 12 (doze) meses.`;
+
+  const testemunhasBloco = numTest < 2 ? '' : `\n\nTestemunhas:\n\n_________________________________          _________________________________\nNome:                                        Nome:\nCPF:                                         CPF:`;
+  const clausulaEspBloco = clausulasEsp ? `\nCLÁUSULA DÉCIMA SEGUNDA — DISPOSIÇÕES ESPECIAIS\n\n${clausulasEsp}\n` : '';
+  const repBloco = cliRep ? `, representada por ${cliRep}` : '';
+
+  const contrato = `CONTRATO DE PRESTAÇÃO DE SERVIÇOS
+${nomesServicos[tipoServico].toUpperCase()}
+
+
+CONTRATADO:  ${contNome}
+             CPF/CNPJ: ${contCPF || '___'} | RG: ${contRG || '___'}
+             ${contNac}, ${contEstCivil}, ${contProf}
+             Endereço: ${contEnd || '___'}
+
+CONTRATANTE: ${cliNome}${repBloco}
+             CPF/CNPJ: ${cliCPF || '___'}
+             Endereço: ${cliEnd || '___'}
+
+As partes acima identificadas celebram o presente CONTRATO DE PRESTAÇÃO DE SERVIÇOS, regido pelas disposições do Código Civil Brasileiro (arts. 593-609), mediante as seguintes cláusulas:
+
+
+CLÁUSULA PRIMEIRA — DO OBJETO
+
+O CONTRATADO obriga-se a prestar ao CONTRATANTE os seguintes serviços:
+
+${objeto}
+
+
+CLÁUSULA SEGUNDA — DO PRAZO
+
+O presente contrato terá vigência de ${duracaoTxt}, com início na data de sua assinatura.
+
+
+CLÁUSULA TERCEIRA — DO PREÇO E FORMA DE PAGAMENTO
+
+Pelos serviços prestados, o CONTRATANTE pagará ao CONTRATADO o valor de ${fmtMoeda(parseFloat(valor))}, a ser pago ${formaPagTxt}, mediante depósito, transferência ou PIX na conta informada pelo CONTRATADO.${reajusteTxt}
+
+
+CLÁUSULA QUARTA — DAS OBRIGAÇÕES DO CONTRATADO
+
+O CONTRATADO obriga-se a:
+a) Executar os serviços com zelo, competência e nos prazos acordados;
+b) Manter sigilo sobre todas as informações do CONTRATANTE;
+c) Comunicar imediatamente qualquer impedimento à execução dos serviços;
+d) Responder pelos danos causados por culpa ou dolo na execução dos serviços.
+
+
+CLÁUSULA QUINTA — DAS OBRIGAÇÕES DO CONTRATANTE
+
+O CONTRATANTE obriga-se a:
+a) Efetuar os pagamentos nas datas acordadas;
+b) Fornecer as informações e acessos necessários à execução dos serviços;
+c) Comunicar previamente eventuais mudanças no escopo dos serviços.
+
+
+CLÁUSULA SEXTA — DA MORA E JUROS
+
+O atraso no pagamento sujeitará o CONTRATANTE ao pagamento de multa moratória de 2% (dois por cento), juros de 1% (um por cento) ao mês e correção monetária pelo IPCA, calculados sobre o valor em atraso.
+
+
+CLÁUSULA SÉTIMA — DA CONFIDENCIALIDADE E PROPRIEDADE INTELECTUAL
+
+O CONTRATADO compromete-se a manter absoluto sigilo sobre todas as informações, dados e documentos do CONTRATANTE a que tiver acesso. Os trabalhos desenvolvidos no âmbito deste contrato pertencem ao CONTRATANTE, salvo acordo expresso em contrário.
+
+
+CLÁUSULA OITAVA — DA INDEPENDÊNCIA E AUSÊNCIA DE VÍNCULO EMPREGATÍCIO
+
+O presente contrato não gera qualquer vínculo empregatício entre as partes, sendo o CONTRATADO profissional autônomo/empresa independente, responsável por seus encargos previdenciários e fiscais.
+
+
+CLÁUSULA NONA — DA RESCISÃO
+
+O presente contrato poderá ser rescindido por qualquer das partes mediante aviso prévio de ${avisoRescisao}. A rescisão imotivada pelo CONTRATANTE antes do término do prazo contratual implicará o pagamento de multa de ${multaRescisao}% (${multaRescisao} por cento) sobre o valor total restante do contrato.
+
+
+CLÁUSULA DÉCIMA — DA SOLUÇÃO DE CONFLITOS
+
+As partes elegem a mediação e a negociação direta como primeiro meio de solução de controvérsias, antes de qualquer medida judicial.
+
+
+CLÁUSULA DÉCIMA PRIMEIRA — DO FORO
+
+Fica eleito o foro da ${foro} para dirimir quaisquer controvérsias, com renúncia a qualquer outro, por mais privilegiado que seja.
+${clausulaEspBloco}
+
+${local}, ${fmtData(dataContrato)}.
+
+
+
+
+_________________________________          _________________________________
+${contNome.toUpperCase()}                    ${cliNome.toUpperCase()}
+CONTRATADO                                   CONTRATANTE
+CPF: ${contCPF || '___'}                     CPF/CNPJ: ${cliCPF || '___'}
+${testemunhasBloco}`;
+
+  document.getElementById('doc-box').textContent = contrato;
+  document.getElementById('doc-wrap').classList.add('visible');
+  document.getElementById('doc-wrap').scrollIntoView({ behavior: 'smooth' });
+}
+
+function copiar() {
+  navigator.clipboard.writeText(document.getElementById('doc-box').textContent).then(() => {
+    const btn = document.querySelector('button.copiar');
+    btn.textContent = '✅ Copiado!';
+    setTimeout(() => btn.textContent = '📋 Copiar texto', 2000);
+  });
+}
+
+// Init
+document.getElementById('dataContrato').value = new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>
